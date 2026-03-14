@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TH Monitor - Temperature & Humidity Monitoring Solutions</title>
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(52, 152, 219, 0.8)), 
+                        url('https://images.unsplash.com/photo-1581094794329-cd6c2027b7cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 6rem 0;
+            text-align: center;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #16a085;
+        }
+        
+        /* Introduction Section */
+        .intro {
+            padding: 4rem 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary);
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-title p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .intro-content {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+        
+        .intro-text {
+            flex: 1;
+        }
+        
+        .intro-image {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .intro-image img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-card {
+            background-color: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        /* Use Cases Section */
+        .use-cases {
+            padding: 4rem 0;
+            background-color: #f5f7fa;
+        }
+        
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .use-case-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .use-case-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .use-case-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+        }
+        
+        .use-case-img::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+        }
+        
+        .use-case-img i {
+            z-index: 1;
+        }
+        
+        .use-case-content {
+            padding: 1.5rem;
+        }
+        
+        .use-case-content h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .use-case-content p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .use-case-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .tag {
+            background-color: var(--light);
+            color: var(--dark);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        /* Benefits Section */
+        .benefits {
+            padding: 4rem 0;
+            background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), 
+                        url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .benefits-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+        
+        .benefit-icon {
+            background-color: var(--light);
+            color: var(--secondary);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(rgba(52, 152, 219, 0.85), rgba(44, 62, 80, 0.85)), 
+                        url('https://images.unsplash.com/photo-1581093458791-9d33f4726d7a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .cta h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta p {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .intro-content {
+                flex-direction: column;
+            }
+            
+            .benefit-item {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-icon">🌡️</div>
+                <h1>Temperature And Humidity Monitoring Systems</h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h2>Precision Temperature & Humidity Monitoring</h2>
+            <p>Ensure optimal environmental conditions for your critical applications with our advanced TH monitoring solutions.</p>
+            <a href="#use-cases" class="btn">Explore Use Cases</a>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section class="intro" id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>What is a TH Monitor?</h2>
+                <p>A Temperature and Humidity (TH) Monitor is used to continuously measure and maintain controlled environmental conditions, especially in cold storage applications,data warehouse etc.</p>
+            </div>
+            <div class="intro-content">
+                <div class="intro-text">
+                    <p>The TH Monitor ensures stable temperature and humidity, providing real-time readings, alerts, and data logging to prevent spoilage, protect equipment, and maintain quality and compliance across industrial and commercial environments.</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">📊</div>
+                            <h3>Real-time Monitoring</h3>
+                            <p>Real-Time,continuous tracking of temperature and humidity</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🔔</div>
+                            <h3>Instant Alerts</h3>
+                            <p>Immediate notifications for abnormal conditions</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">📝</div>
+                            <h3>Data Logging</h3>
+                            <p>Comprehensive records for compliance and analysis</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="intro-image">
+                    <img src="C:\Users\avina\OneDrive\Desktop\Company Website\Products\TH img.png" alt="TH Monitoring Device">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="use-cases" id="use-cases">
+        <div class="container">
+            <div class="section-title">
+                <h2>TH Monitor Use Cases</h2>
+                <p>Discover how our TH monitoring solutions are applied across various industries to ensure quality, safety and compliance.</p>
+            </div>
+            <div class="use-cases-grid">
+                <!-- Use Case 1 -->
+                <div class="use-case-card">
+                    <div class="use-case-img" style="background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                        🍎
+                    </div>
+                    <div class="use-case-content">
+                        <h3>Cold Storage for Food</h3>
+                        <p>Maintain optimal conditions for perishable food items in cold storage rooms to prevent spoilage and extend shelf life.</p>
+                        <div class="use-case-tags">
+                            <span class="tag">Food Safety</span>
+                            <span class="tag">Shelf Life</span>
+                            <span class="tag">Energy Efficiency</span>
+                            <span class="tag">Inventory Protection</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Use Case 2 -->
+                <div class="use-case-card">
+                    <div class="use-case-img" style="background-image: url('https://setraf.com/content/images/upload/kapak/ecza-deposu-raf-sistemleri.jpg');">
+                        💊
+                    </div>
+                    <div class="use-case-content">
+                        <h3>Pharmaceutical Storage</h3>
+                        <p>Ensure proper environmental monitoring for vaccines, medicines, and other temperature-sensitive pharmaceutical products.</p>
+                        <div class="use-case-tags">
+                            <span class="tag">Vaccine Storage</span>
+                            <span class="tag">Medicine Preservation</span>
+                            <span class="tag">Regulatory Compliance</span>
+                            </div>
+                    </div>
+                </div>
+                
+                <!-- Use Case 3 -->
+                <div class="use-case-card">
+                    <div class="use-case-img" style="background-image: url('https://www.ficsi.in/blog/wp-content/uploads/2022/09/September-blog-1.jpg');">
+                        🏭
+                    </div>
+                    <div class="use-case-content">
+                        <h3>Food Processing Units</h3>
+                        <p>Monitor environmental conditions during food processing to maintain quality and safety standards.</p>
+                        <div class="use-case-tags">
+                            <span class="tag">Quality Control</span>
+                            <span class="tag">Safety Standards</span> 
+                            <span class="tag">Temperature & Humidity Monitoring</span>   
+                            <span class="tag">Energy Efficiency</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Use Case 4 -->
+                <div class="use-case-card">
+                    <div class="use-case-img" style="background-image: url('https://evolveltd.eu/app/uploads/2020/01/Chemistry-Laboratory.jpg');">
+                        🧪
+                    </div>
+                    <div class="use-case-content">
+                        <h3>Chemical & Laboratory Storage</h3>
+                        <p>Maintain stable conditions for sensitive chemicals, reagents, and laboratory samples.</p>
+                        <div class="use-case-tags">
+                            <span class="tag">Chemical Safety</span>
+                            <span class="tag">Temperature & Humidity Monitoring</span>
+                            <span class="tag">Research Quality</span>
+                            <span class="tag">Energy Efficiency</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Use Case 5 -->
+                <div class="use-case-card">
+                    <div class="use-case-img" style="background-image: url('https://hellohyderabad.org/wp-content/uploads/2025/04/BLOOD-BANKS.jpg');">
+                        🏥
+                    </div>
+                    <div class="use-case-content">
+                        <h3>Hospitals & Blood Banks</h3>
+                        <p>Ensure proper environmental conditions for blood products, tissues, and other medical supplies.</p>
+                        <div class="use-case-tags">
+                            <span class="tag">Medical Safety</span>
+                            <span class="tag">Blood Storage</span>
+                            <span class="tag">Patient Care</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Use Case 6 -->
+                <div class="use-case-card">
+                    <div class="use-case-img" style="background-image: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                        💻
+                    </div>
+                    <div class="use-case-content">
+                        <h3>Server Rooms & Data Centers</h3>
+                        <p>Prevent equipment damage and ensure optimal performance by monitoring environmental conditions.</p>
+                        <div class="use-case-tags">
+                            <span class="tag">Equipment Protection</span>
+                            <span class="tag">Uptime</span>
+                            <span class="tag">Performance</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits" id="benefits">
+        <div class="container">
+            <div class="section-title">
+                <h2>Key Benefits of TH Monitoring</h2>
+                <p>Discover how our solutions deliver value across your operations</p>
+            </div>
+            <div class="benefits-content">
+                <div class="benefit-item">
+                    <div class="benefit-icon">🛡️</div>
+                    <div>
+                        <h3>Prevent Spoilage & Product Loss</h3>
+                        <p>Minimize spoilage and degradation of sensitive products by maintaining optimal environmental conditions.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">📈</div>
+                    <div>
+                        <h3>Real-Time Alerts</h3>
+                        <p>Immediate notifications for abnormal conditions.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">💰</div>
+                    <div>
+                        <h3>Reduce Operational Costs</h3>
+                        <p>Prevent equipment damage and reduce energy consumption through optimized environmental control.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🔍</div>
+                    <div>
+                        <h3>Quality Assurance</h3>
+                        <p>Maintain consistent product quality by ensuring stable temperature and humidity levels.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="container">
+            <h2>Ready to Optimize Your Environmental Monitoring?</h2>
+            <p>Contact our experts to discuss how our TH monitoring solutions can meet your specific requirements.</p>
+           
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <!-- Footer content has been removed as requested -->
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

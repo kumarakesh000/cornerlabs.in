@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSM Pump Controller</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c5aa0;
+            --secondary: #3a7bd5;
+            --accent: #00d2ff;
+            --light: #f5f9ff;
+            --dark: #1a2c4e;
+            --success: #28a745;
+            --warning: #ffc107;
+            --gray: #6c757d;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 6rem 0;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent);
+        }
+
+        .cta-button:hover {
+            background-color: transparent;
+            color: var(--accent);
+        }
+
+        /* Product Showcase Section */
+        .product-showcase {
+            padding: 5rem 0;
+            background-color: white;
+        }
+
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        .product-images {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .main-product-image {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .product-thumbnails {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 5px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .thumbnail:hover, .thumbnail.active {
+            border-color: var(--accent);
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-details {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .product-details h2 {
+            color: var(--dark);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .product-details h2:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent);
+            bottom: 0;
+            left: 0;
+            border-radius: 2px;
+        }
+
+        .product-details h3 {
+            color: var(--primary);
+            margin: 1.5rem 0 0.8rem;
+        }
+
+        .specs-list {
+            list-style: none;
+            margin: 1rem 0 1.5rem;
+        }
+
+        .specs-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .specs-list i {
+            color: var(--success);
+            margin-right: 10px;
+        }
+
+        /* Features Section */
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        section {
+            padding: 5rem 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            background-color: var(--light);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        .feature-card h3 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        /* Applications Section */
+        .applications {
+            background-color: var(--light);
+        }
+
+        .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .application-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .application-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .app-icon {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .app-content {
+            padding: 1.5rem;
+        }
+
+        .app-content h3 {
+            color: var(--dark);
+            margin-bottom: 0.8rem;
+        }
+
+        /* How It Works */
+        .steps-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+        }
+
+        .step:not(:last-child):after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background-color: var(--accent);
+            top: 30px;
+            left: 60%;
+            z-index: -1;
+        }
+
+        /* Benefits */
+        .benefits-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .benefit-icon {
+            color: var(--success);
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background-color: var(--accent);
+            bottom: 0;
+            left: 0;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title h2, .product-details h2 {
+                font-size: 2rem;
+            }
+            
+            .step:not(:last-child):after {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--primary);
+                flex-direction: column;
+                padding: 1rem 0;
+                text-align: center;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            nav ul.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero {
+                padding: 4rem 0;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            section {
+                padding: 3rem 0;
+            }
+
+            .product-container {
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
+            
+            .cta-button {
+                padding: 12px 24px;
+                font-size: 1rem;
+            }
+            
+            .section-title h2, .product-details h2 {
+                font-size: 1.8rem;
+            }
+            
+            .feature-card, .application-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-water"></i>
+                <div class="logo-text">GSM Pump Controller</div>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#product">Product</a></li>
+                    <li><a href="#applications">Applications</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>Real-Time Remote Pump Monitoring and Control</h1>
+            <p>Advanced GSM-technology-based device that allows users to remotely operate water pumps using mobile phone calls or SMS commands. Perfect for remote or hard-to-reach locations where manual pump operation is difficult.</p>
+            <a href="#product" class="cta-button">View Product Details</a>
+        </div>
+    </section>
+
+    <!-- Product Showcase Section -->
+    <section id="product" class="product-showcase">
+        <div class="container">
+            <div class="product-container">
+                <div class="product-images">
+                    <!-- Main Product Image -->
+                    <img id="mainProductImage" src="C:\Users\avina\OneDrive\Desktop\Company Website\Products\GSM.jpg" alt="GSM Pump Controller Unit" class="main-product-image">
+                    
+                    <!-- Thumbnail Images -->
+                    <div class="product-thumbnails">
+                        <div class="thumbnail active" data-image="C:\Users\avina\OneDrive\Desktop\Company Website\Products\GSM.jpg" alt="GSM Pump Controller Unit">
+                            <img src="C:\Users\avina\OneDrive\Desktop\Company Website\Products\GSM.jpg" alt="GSM Pump Controller Unit" alt="Front View">
+                        </div>
+                        <div class="thumbnail" data-image="C:\Users\avina\OneDrive\Desktop\Company Website\Products\GSM Features.jpeg">
+                             <img src="C:\Users\avina\OneDrive\Desktop\Company Website\Products\GSM Features.jpeg" alt="Control Panel">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-details">
+                    <h2>GSM Pump Controller</h2>
+                    <p>Easily control and monitor your water pump from anywhere. With our Advanced GSM Pump Controller, you can start or stop your pump using a quick phone call or SMS. The reliable GSM network ensures smooth, remote operation wherever there is network coverage.</p>
+                    
+                    <h3>Key Specifications</h3>
+                    <ul class="specs-list">
+                        <li><i class="fas fa-check"></i> <strong>Communication:</strong> GSM/GPRS Network</li>
+                        <li><i class="fas fa-check"></i> <strong>Control Methods:</strong> Call & SMS</li>
+                        <li><i class="fas fa-check"></i> <strong>Input Voltage:</strong> DC 5v </li>
+                        <li><i class="fas fa-check"></i> <strong>Relay Capacity:</strong> Up to 5A</li>
+                        <li><i class="fas fa-check"></i> <strong>Enclosure:</strong> IP65 Waterproof</li>
+                        <li><i class="fas fa-check"></i> <strong>Mobile Compatibility:</strong> GSM Networks</li>
+                    </ul>
+                    
+                    <h3>Main Features</h3>
+                    <p>Remote ON/OFF control, Scheduling functionality, Real-time status updates, Low power consumption, Weatherproof design, Easy installation and Mobile compatibility.</p>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview">
+        <div class="container">
+            <div class="section-title">
+                <h2>GSM Pump Controller Overview</h2>
+                <p>Control your water pumps remotely with advanced GSM technology</p>
+            </div>
+            <div class="overview-content">
+                <p style="text-align: center; max-width: 900px; margin: 0 auto 2rem; font-size: 1.1rem;">
+                    A GSM Pump Controller is a device that allows you to operate and monitor a water pump using a mobile phone. It uses a GSM (mobile network) module to send and receive commands through calls or SMS.
+                </p>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-power-off"></i>
+                        </div>
+                        <h3>Pump ON/OFF</h3>
+                        <p>Remotely start or stop your water pump with a simple phone call or SMS command from anywhere.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>Schedule Operation</h3>
+                        <p>Set automatic ON/OFF times for your pump to operate on a predefined schedule without manual intervention.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h3>Status Updates</h3>
+                        <p>Receive real-time status updates about your pump operation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Applications Section -->
+    <section id="applications" class="applications">
+        <div class="container">
+            <div class="section-title">
+                <h2>Primary Applications</h2>
+                <p>Versatile solutions for various industries and use cases</p>
+            </div>
+            <div class="applications-grid">
+                <!-- Application 1 -->
+                <div class="application-card">
+                    <div class="app-icon">
+                        <i class="fas fa-tractor"></i>
+                    </div>
+                    <div class="app-content">
+                        <h3>Agriculture / Long-Distance Fields</h3>
+                        <p>Operate irrigation pumps from far-off agricultural fields, avoiding long travel just to start or stop pumps.</p>
+                    </div>
+                </div>
+                <!-- Application 2 -->
+                <div class="application-card">
+                    <div class="app-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="app-content">
+                        <h3>Home Water Tank Automation</h3>
+                        <p>Switch ON/OFF the motor pump from anywhere and maintain water tank levels without manual monitoring.</p>
+                    </div>
+                </div>
+                <!-- Application 3 -->
+                <div class="application-card">
+                    <div class="app-icon">
+                        <i class="fas fa-cow"></i>
+                    </div>
+                    <div class="app-content">
+                        <h3>Livestock Farms</h3>
+                        <p>Automate water supply for animals and schedule pump operation for regular drinking water refills.</p>
+                    </div>
+                </div>
+                <!-- Application 4 -->
+                <div class="application-card">
+                    <div class="app-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="app-content">
+                        <h3>Community Water Supply</h3>
+                        <p>Control borewell and overhead tank pumps in villages or residential societies efficiently.</p>
+                    </div>
+                </div>
+                <!-- Application 5 -->
+                <div class="application-card">
+                    <div class="app-icon">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <div class="app-content">
+                        <h3>Industrial Pumping Systems</h3>
+                        <p>Remote operation for pumps used in factories, warehouses, cooling systems, and wastewater management.</p>
+                    </div>
+                </div>
+                <!-- Application 6 -->
+                <div class="application-card">
+                    <div class="app-icon">
+                        <i class="fas fa-hard-hat"></i>
+                    </div>
+                    <div class="app-content">
+                        <h3>Construction Sites</h3>
+                        <p>Control pumps used for curing, mixing, dust suppression, and water storage at temporary worksites.</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>How It Works</h2>
+                <p>Simple three-step process to control your pump remotely</p>
+            </div>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Install & Configure</h3>
+                    <p>Install the GSM controller unit with your pump system and configure it with your mobile number.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Send Command</h3>
+                    <p>Call or send an SMS from your registered mobile number to the controller with simple commands.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Monitor & Control</h3>
+                    <p>Your pump responds to commands instantly. Receive status updates and control from anywhere.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="benefits" class="applications">
+        <div class="container">
+            <div class="section-title">
+                <h2>Key Benefits</h2>
+                <p>Why choose GSM Pump Controller for your water management needs</p>
+            </div>
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div>
+                        <h3>Remote Accessibility</h3>
+                        <p>Control your pumps from anywhere with mobile network coverage, eliminating the need to be physically present at the pump location.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div>
+                        <h3>Time & Cost Savings</h3>
+                        <p>Reduce travel time and costs associated with manual pump operation, especially in remote agricultural fields or distant locations.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div>
+                        <h3>Increased Efficiency</h3>
+                        <p>Schedule pump operations for optimal timing, improve water management and prevent overwatering or underwatering.</p>
+                    </div>
+                </div>
+                
+                    
+                        
+                    </div>
+                    <div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content"></div>
+                <div class="footer-column"></div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-phone" style="margin-right: 10px;"></i> +91 7974987359</li>
+                        <li><i class="fas fa-envelope" style="margin-right: 10px;"></i> replyasac@gmail.com</li>
+                        <li><i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> Agri Sensors and Controls, WhiteField-Bangalore</li>
+                    </ul>
+                                    </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Agri Sensors and Controls. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navMenu = document.getElementById('navMenu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            mobileMenuBtn.innerHTML = navMenu.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Image gallery functionality
+        const mainProductImage = document.getElementById('mainProductImage');
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', function() {
+                // Remove active class from all thumbnails
+                thumbnails.forEach(thumb => thumb.classList.remove('active'));
+                
+                // Add active class to clicked thumbnail
+                this.classList.add('active');
+                
+                // Change main image
+                const newImageSrc = this.getAttribute('data-image');
+                mainProductImage.src = newImageSrc;
+            });
+        });
+    </script>
+</body>
+</html>
